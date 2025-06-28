@@ -81,13 +81,11 @@ O projeto é dividido em duas partes principais:
 
 A aplicação pode ser executada em um único container Docker que já inclui o backend em Flask e o frontend compilado.
 
-1. Construa a imagem:
-   ```bash
-   docker build -t aws-uploader .
-   ```
-2. Inicie o container mapeando a porta 8000:
-   ```bash
-   docker run --rm -p 8000:8000 aws-uploader
-   ```
+Execute o script `build_and_run.sh` para construir a imagem e iniciar o container
+utilizando automaticamente as credenciais AWS configuradas no servidor:
+
+```bash
+./build_and_run.sh
+```
 
 Depois disso, acesse `http://localhost:8000` no navegador para utilizar a interface.

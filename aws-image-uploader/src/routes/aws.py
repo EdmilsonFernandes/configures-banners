@@ -60,13 +60,12 @@ def setup_folders():
     """Cria estrutura de pastas no S3"""
     data = request.json
     wl_name = data.get('wl_name')
-    profile_name = data.get('profile_name')
 
     if not wl_name:
         return jsonify({'error': 'Nome WL é obrigatório'}), 400
 
     try:
-        s3_client = get_s3_client(profile_name)
+        s3_client = get_s3_client()
         base_path = f"app/{wl_name}/home"
 
         folders = [
@@ -94,7 +93,6 @@ def upload_images():
     """Faz upload de imagens para S3"""
     try:
         wl_name = request.form.get('wl_name')
-        profile_name = request.form.get('profile_name')
         folder_type = request.form.get('folder_type')
 
         if not all([wl_name, folder_type]):
@@ -107,7 +105,7 @@ def upload_images():
         if not files or files[0].filename == '':
             return jsonify({'error': 'Nenhum arquivo selecionado'}), 400
 
-        s3_client = get_s3_client(profile_name)
+        s3_client = get_s3_client()
         base_path = f"app/{wl_name}/home"
 
         uploaded_files = []
@@ -170,9 +168,8 @@ def test_aws_connection():
     """Testa conexão com AWS"""
     try:
         data = request.json
-        profile_name = data.get('profile_name')
 
-        s3_client = get_s3_client(profile_name)
+        s3_client = get_s3_client()
 
         # Tenta listar buckets para testar conexão
         s3_client.list_buckets()

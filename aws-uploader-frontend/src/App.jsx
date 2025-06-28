@@ -26,9 +26,6 @@ const FOLDER_TYPES = {
 
 function App() {
   const [wlName, setWlName] = useState('')
-  const [profileName, setProfileName] = useState('default')
-  const [isCustomProfile, setIsCustomProfile] = useState(false)
-  const [customProfileName, setCustomProfileName] = useState('')
   const [isSetupComplete, setIsSetupComplete] = useState(false)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
@@ -65,13 +62,10 @@ function App() {
 
     setLoading(true)
     try {
-      const profile = isCustomProfile ? customProfileName : 'default'
-
       // Testar conexão AWS
       const testResponse = await fetch(`${API_BASE_URL}/test-aws-connection`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ profile_name: profile })
+        headers: { 'Content-Type': 'application/json' }
       })
 
       if (!testResponse.ok) {
@@ -80,22 +74,20 @@ function App() {
       }
 
       // Criar estrutura de pastas
-      const setupResponse = await fetch(`${API_BASE_URL}/setup-folders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          wl_name: wlName,
-          profile_name: profile
+        const setupResponse = await fetch(`${API_BASE_URL}/setup-folders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            wl_name: wlName
+          })
         })
-      })
 
       if (!setupResponse.ok) {
         const error = await setupResponse.json()
         throw new Error(error.error || 'Erro ao criar estrutura de pastas')
       }
 
-      setProfileName(profile)
-      setIsSetupComplete(true)
+        setIsSetupComplete(true)
       showMessage('Configuração concluída com sucesso!', 'success')
 
     } catch (error) {
@@ -112,7 +104,6 @@ function App() {
     try {
       const formData = new FormData()
       formData.append('wl_name', wlName)
-      formData.append('profile_name', profileName)
       formData.append('folder_type', folderType)
 
       Array.from(files).forEach(file => {
@@ -306,30 +297,7 @@ function App() {
                 />
               </div>
 
-              <div>
-                <Label>Perfil AWS SSO</Label>
-                <Select value={isCustomProfile ? 'custom' : 'default'} onValueChange={(value) => setIsCustomProfile(value === 'custom')}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="default">Perfil Padrão</SelectItem>
-                    <SelectItem value="custom">Perfil Personalizado</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
 
-              {isCustomProfile && (
-                <div>
-                  <Label htmlFor="profile-name">Nome do Perfil</Label>
-                  <Input
-                    id="profile-name"
-                    placeholder="nome-do-perfil"
-                    value={customProfileName}
-                    onChange={(e) => setCustomProfileName(e.target.value)}
-                  />
-                </div>
-              )}
 
               <Button
                 onClick={handleSetup}
