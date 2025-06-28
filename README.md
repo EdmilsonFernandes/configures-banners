@@ -76,3 +76,18 @@ O projeto é dividido em duas partes principais:
 -   O domínio `https://d1jc1l746atx5b.cloudfront.net/` é usado para gerar as URLs das imagens no JSON, conforme o script original.
 
 
+
+## Executar com Docker
+
+A aplicação pode ser executada em um único container Docker que já inclui o backend em Flask e o frontend compilado.
+
+1. Construa a imagem:
+   ```bash
+   docker build -t aws-uploader .
+   ```
+2. Inicie o container mapeando a porta 8000:
+   ```bash
+   docker run --rm -p 8000:8000 aws-uploader
+   ```
+
+Depois disso, acesse `http://localhost:8000` no navegador para utilizar a interface.

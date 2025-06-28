@@ -1,0 +1,5 @@
+**/__pycache__
+aws-uploader-frontend/node_modules
+aws-uploader-frontend/dist
+aws-image-uploader/__pycache__
+.git
