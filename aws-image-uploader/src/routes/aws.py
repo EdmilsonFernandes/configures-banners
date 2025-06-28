@@ -167,7 +167,11 @@ def generate_json():
 def test_aws_connection():
     """Testa conexão com AWS"""
     try:
-        data = request.json
+        # Nenhum corpo JSON é necessário para esse endpoint, mas
+        # request.get_json() é chamado em modo silencioso para evitar erros
+        # quando o cliente envia uma requisição sem corpo ou cabeçalho
+        # Content-Type incorreto.
+        request.get_json(silent=True)
 
         s3_client = get_s3_client()
 
